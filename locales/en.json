@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "title": "YouTube",
+    "videos": "Latest Videos",
+    "channel": "Channel",
+    "live": "Live Now",
+    "upcoming": "Upcoming",
+    "offline": "Offline",
+    "subscribers": "subscribers",
+    "views": "views",
+    "watchNow": "Watch Now",
+    "viewChannel": "View Channel",
+    "viewAll": "View All Videos",
+    "noVideos": "No videos found",
+    "refreshed": "Refreshed",
+    "error": {
+      "noApiKey": "YouTube API key not configured",
+      "noChannel": "YouTube channel not specified",
+      "connection": "Could not connect to YouTube API"
+    },
+    "widget": {
+      "description": "View full channel on YouTube",
+      "view": "Open YouTube Channel"
+    }
+  }
+}

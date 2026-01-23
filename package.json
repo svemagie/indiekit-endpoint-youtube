@@ -1,0 +1,52 @@
+{
+  "name": "@rmdes/indiekit-endpoint-youtube",
+  "version": "1.0.0",
+  "description": "YouTube channel endpoint for Indiekit. Display latest videos and live status from any YouTube channel.",
+  "keywords": [
+    "indiekit",
+    "indiekit-plugin",
+    "indieweb",
+    "youtube",
+    "videos",
+    "live",
+    "streaming"
+  ],
+  "homepage": "https://github.com/rmdes/indiekit-endpoint-youtube",
+  "bugs": {
+    "url": "https://github.com/rmdes/indiekit-endpoint-youtube/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmdes/indiekit-endpoint-youtube.git"
+  },
+  "author": {
+    "name": "Ricardo Mendes",
+    "url": "https://rmendes.net"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "includes",
+    "lib",
+    "locales",
+    "views",
+    "index.js"
+  ],
+  "dependencies": {
+    "@indiekit/error": "^1.0.0-beta.25",
+    "express": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@indiekit/indiekit": ">=1.0.0-beta.25"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
