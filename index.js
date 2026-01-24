@@ -15,8 +15,11 @@ const publicRouter = express.Router();
 const defaults = {
   mountPath: "/youtube",
   apiKey: process.env.YOUTUBE_API_KEY,
+  // Single channel (backward compatible)
   channelId: process.env.YOUTUBE_CHANNEL_ID,
   channelHandle: process.env.YOUTUBE_CHANNEL_HANDLE,
+  // Multiple channels support: array of {id, handle, name}
+  channels: null,
   cacheTtl: 300_000, // 5 minutes
   liveCacheTtl: 60_000, // 1 minute for live status
   limits: {

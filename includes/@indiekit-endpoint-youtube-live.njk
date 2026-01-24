@@ -1,0 +1,16 @@
+{# Live status partial for embedding in other templates #}
+{% if liveStatus and liveStatus.isLive %}
+<div class="youtube-live youtube-live--active">
+  <span class="youtube-live__badge">Live</span>
+  <a href="https://www.youtube.com/watch?v={{ liveStatus.videoId }}" target="_blank" rel="noopener">
+    {{ liveStatus.title }}
+  </a>
+</div>
+{% elif liveStatus and liveStatus.isUpcoming %}
+<div class="youtube-live youtube-live--upcoming">
+  <span class="youtube-live__badge">Upcoming</span>
+  <a href="https://www.youtube.com/watch?v={{ liveStatus.videoId }}" target="_blank" rel="noopener">
+    {{ liveStatus.title }}
+  </a>
+</div>
+{% endif %}

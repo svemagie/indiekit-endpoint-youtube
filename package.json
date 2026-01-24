@@ -1,6 +1,6 @@
 {
   "name": "@rmdes/indiekit-endpoint-youtube",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "YouTube channel endpoint for Indiekit. Display latest videos and live status from any YouTube channel.",
   "keywords": [
     "indiekit",

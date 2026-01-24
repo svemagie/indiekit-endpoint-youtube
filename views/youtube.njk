@@ -188,8 +188,8 @@
       <div class="yt-channel__info">
         <h2 class="yt-channel__name">{{ channel.title }}</h2>
         <div class="yt-channel__stats">
-          <span>{{ channel.subscriberCount | localeNumber }} {{ __("youtube.subscribers") }}</span>
-          <span>{{ channel.videoCount | localeNumber }} videos</span>
+          <span>{{ channel.subscriberCount }} {{ __("youtube.subscribers") }}</span>
+          <span>{{ channel.videoCount }} videos</span>
         </div>
       </div>
       {% if isLive %}
@@ -255,7 +255,7 @@
               <a href="{{ video.url }}" target="_blank" rel="noopener">{{ video.title }}</a>
             </h3>
             <div class="yt-video__meta">
-              {{ video.viewCount | localeNumber }} {{ __("youtube.views") }}
+              {{ video.viewCount }} {{ __("youtube.views") }}
             </div>
           </div>
         </li>

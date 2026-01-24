@@ -1,0 +1,13 @@
+{# Videos partial for embedding in other templates #}
+{% if videos and videos.length > 0 %}
+<ul class="youtube-list youtube-list--compact">
+  {% for video in videos %}
+  {% if loop.index <= 5 %}
+  <li class="youtube-list__item">
+    <a href="{{ video.url }}" target="_blank" rel="noopener">{{ video.title }}</a>
+    <small class="youtube-meta">{{ video.viewCount }} views</small>
+  </li>
+  {% endif %}
+  {% endfor %}
+</ul>
+{% endif %}
