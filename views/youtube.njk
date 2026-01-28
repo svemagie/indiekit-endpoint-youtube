@@ -178,7 +178,117 @@
 
   {% if error %}
     {{ prose({ text: error.message }) }}
+  {% elif isMultiChannel and channelsData %}
+    {# Multi-channel mode: show all channels #}
+    {% for chData in channelsData %}
+    <div class="yt-channel-section" style="{% if not loop.first %}margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border, #e5e5e5);{% endif %}">
+      {# Channel Header #}
+      {% if chData.error %}
+      <div class="yt-channel" style="border: 1px solid #ff6b6b;">
+        <div class="yt-channel__info">
+          <h2 class="yt-channel__name">{{ chData.name }}</h2>
+          <p style="color: #ff6b6b; margin: 0;">Error: {{ chData.error }}</p>
+        </div>
+      </div>
+      {% elif chData.channel %}
+      <div class="yt-channel">
+        {% if chData.channel.thumbnail %}
+        <img src="{{ chData.channel.thumbnail }}" alt="" class="yt-channel__avatar">
+        {% endif %}
+        <div class="yt-channel__info">
+          <h2 class="yt-channel__name">{{ chData.channel.title }}</h2>
+          <div class="yt-channel__stats">
+            <span>{{ chData.channel.subscriberCount }} {{ __("youtube.subscribers") }}</span>
+            <span>{{ chData.channel.videoCount }} videos</span>
+          </div>
+        </div>
+        {% if chData.isLive %}
+        <span class="yt-live-badge yt-live-badge--live">
+          <span class="yt-live-dot"></span>
+          {{ __("youtube.live") }}
+        </span>
+        {% elif chData.isUpcoming %}
+        <span class="yt-live-badge yt-live-badge--upcoming">
+          {{ __("youtube.upcoming") }}
+        </span>
+        {% else %}
+        <span class="yt-live-badge yt-live-badge--offline">
+          {{ __("youtube.offline") }}
+        </span>
+        {% endif %}
+      </div>
+
+      {# Live Stream (if live) #}
+      {% if chData.liveStatus and (chData.liveStatus.isLive or chData.liveStatus.isUpcoming) %}
+      <section class="yt-section">
+        <h3>{% if chData.liveStatus.isLive %}{{ __("youtube.live") }}{% else %}{{ __("youtube.upcoming") }}{% endif %}</h3>
+        <div class="yt-live-stream">
+          {% if chData.liveStatus.thumbnail %}
+          <img src="{{ chData.liveStatus.thumbnail }}" alt="" class="yt-live-stream__thumb">
+          {% endif %}
+          <div class="yt-live-stream__info">
+            <h4 class="yt-live-stream__title">
+              <a href="https://www.youtube.com/watch?v={{ chData.liveStatus.videoId }}" target="_blank" rel="noopener">
+                {{ chData.liveStatus.title }}
+              </a>
+            </h4>
+            {{ button({
+              href: "https://www.youtube.com/watch?v=" + chData.liveStatus.videoId,
+              text: __("youtube.watchNow"),
+              target: "_blank"
+            }) }}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+
+      {# Latest Videos #}
+      <section class="yt-section">
+        <h3>{{ __("youtube.videos") }}</h3>
+        {% if chData.videos and chData.videos.length > 0 %}
+        <ul class="yt-video-grid">
+          {% for video in chData.videos %}
+          <li class="yt-video">
+            <div class="yt-video__thumb-wrapper">
+              <a href="{{ video.url }}" target="_blank" rel="noopener">
+                <img src="{{ video.thumbnail }}" alt="" class="yt-video__thumb" loading="lazy">
+              </a>
+              {% if video.durationFormatted and not video.isLive %}
+              <span class="yt-video__duration">{{ video.durationFormatted }}</span>
+              {% elif video.isLive %}
+              <span class="yt-video__duration" style="background:#ff0000">LIVE</span>
+              {% endif %}
+            </div>
+            <div class="yt-video__info">
+              <h4 class="yt-video__title">
+                <a href="{{ video.url }}" target="_blank" rel="noopener">{{ video.title }}</a>
+              </h4>
+              <div class="yt-video__meta">
+                {{ video.viewCount }} {{ __("youtube.views") }}
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        {{ prose({ text: __("youtube.noVideos") }) }}
+        {% endif %}
+      </section>
+
+      {# Link to YouTube channel #}
+      <div class="yt-public-link" style="margin-top: 1rem;">
+        <p>{{ __("youtube.widget.description") }}</p>
+        {{ button({
+          href: "https://www.youtube.com/channel/" + chData.channel.id,
+          text: __("youtube.widget.view"),
+          target: "_blank"
+        }) }}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
   {% else %}
+    {# Single channel mode (backward compatible) #}
     {# Channel Header #}
     {% if channel %}
     <div class="yt-channel">
