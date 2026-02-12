@@ -42,3 +42,7 @@ YouTube Data API has a 10,000 units/day default quota:
 - `search.list`: 100 units (used only for full live status check with `?full=true`)
 
 The plugin uses the playlist method by default for quota efficiency.
+
+## Workspace Context
+
+This plugin is part of the Indiekit development workspace at `/home/rick/code/indiekit-dev/`. See the workspace CLAUDE.md for the full repository map. It is deployed via `indiekit-cloudron/` and listed in its `indiekit.config.js` plugins array.
