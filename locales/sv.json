@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "title": "YouTube",
+    "videos": "Senaste videor",
+    "channel": "Kanal",
+    "live": "Live nu",
+    "upcoming": "Kommande",
+    "offline": "Offline",
+    "subscribers": "prenumeranter",
+    "views": "visningar",
+    "watchNow": "Titta nu",
+    "viewChannel": "Visa kanal",
+    "viewAll": "Visa alla videor",
+    "noVideos": "Inga videor hittades",
+    "refreshed": "Uppdaterad",
+    "error": {
+      "noApiKey": "YouTube API-nyckel inte konfigurerad",
+      "noChannel": "YouTube-kanal inte angiven",
+      "connection": "Kunde inte ansluta till YouTube API"
+    },
+    "widget": {
+      "description": "Visa fullständig kanal på YouTube",
+      "view": "Öppna YouTube-kanal"
+    }
+  }
+}

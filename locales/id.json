@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "title": "YouTube",
+    "videos": "Video Terbaru",
+    "channel": "Saluran",
+    "live": "Live Sekarang",
+    "upcoming": "Akan Datang",
+    "offline": "Offline",
+    "subscribers": "pelanggan",
+    "views": "tayangan",
+    "watchNow": "Tonton Sekarang",
+    "viewChannel": "Lihat Saluran",
+    "viewAll": "Lihat Semua Video",
+    "noVideos": "Tidak ada video ditemukan",
+    "refreshed": "Diperbarui",
+    "error": {
+      "noApiKey": "Kunci API YouTube tidak dikonfigurasi",
+      "noChannel": "Saluran YouTube tidak ditentukan",
+      "connection": "Tidak dapat terhubung ke YouTube API"
+    },
+    "widget": {
+      "description": "Lihat saluran lengkap di YouTube",
+      "view": "Buka Saluran YouTube"
+    }
+  }
+}

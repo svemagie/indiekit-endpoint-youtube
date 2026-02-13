@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "title": "YouTube",
+    "videos": "नवीनतम वीडियो",
+    "channel": "चैनल",
+    "live": "अभी लाइव",
+    "upcoming": "आने वाला",
+    "offline": "ऑफ़लाइन",
+    "subscribers": "सब्सक्राइबर",
+    "views": "दृश्य",
+    "watchNow": "अभी देखें",
+    "viewChannel": "चैनल देखें",
+    "viewAll": "सभी वीडियो देखें",
+    "noVideos": "कोई वीडियो नहीं मिला",
+    "refreshed": "ताज़ा किया गया",
+    "error": {
+      "noApiKey": "YouTube API कुंजी कॉन्फ़िगर नहीं है",
+      "noChannel": "YouTube चैनल निर्दिष्ट नहीं है",
+      "connection": "YouTube API से कनेक्ट नहीं हो सका"
+    },
+    "widget": {
+      "description": "YouTube पर पूरा चैनल देखें",
+      "view": "YouTube चैनल खोलें"
+    }
+  }
+}

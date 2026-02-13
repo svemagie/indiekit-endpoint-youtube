@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "title": "YouTube",
+    "videos": "最新视频",
+    "channel": "频道",
+    "live": "正在直播",
+    "upcoming": "即将开始",
+    "offline": "离线",
+    "subscribers": "订阅者",
+    "views": "次观看",
+    "watchNow": "立即观看",
+    "viewChannel": "查看频道",
+    "viewAll": "查看所有视频",
+    "noVideos": "未找到视频",
+    "refreshed": "已刷新",
+    "error": {
+      "noApiKey": "未配置 YouTube API 密钥",
+      "noChannel": "未指定 YouTube 频道",
+      "connection": "无法连接到 YouTube API"
+    },
+    "widget": {
+      "description": "在 YouTube 上查看完整频道",
+      "view": "打开 YouTube 频道"
+    }
+  }
+}

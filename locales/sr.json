@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "title": "YouTube",
+    "videos": "Најновији видео снимци",
+    "channel": "Канал",
+    "live": "Уживо сада",
+    "upcoming": "Ускоро",
+    "offline": "Офлајн",
+    "subscribers": "претплатника",
+    "views": "прегледа",
+    "watchNow": "Гледај сада",
+    "viewChannel": "Погледај канал",
+    "viewAll": "Погледај све видео снимке",
+    "noVideos": "Нису пронађени видео снимци",
+    "refreshed": "Освежено",
+    "error": {
+      "noApiKey": "YouTube API кључ није конфигурисан",
+      "noChannel": "YouTube канал није наведен",
+      "connection": "Није могуће повезати се са YouTube API"
+    },
+    "widget": {
+      "description": "Погледајте комплетан канал на YouTube",
+      "view": "Отвори YouTube канал"
+    }
+  }
+}

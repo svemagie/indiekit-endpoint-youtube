@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "title": "YouTube",
+    "videos": "Nieuwste video's",
+    "channel": "Kanaal",
+    "live": "Nu live",
+    "upcoming": "Binnenkort",
+    "offline": "Offline",
+    "subscribers": "abonnees",
+    "views": "weergaven",
+    "watchNow": "Nu kijken",
+    "viewChannel": "Kanaal bekijken",
+    "viewAll": "Alle video's bekijken",
+    "noVideos": "Geen video's gevonden",
+    "refreshed": "Vernieuwd",
+    "error": {
+      "noApiKey": "YouTube API-sleutel niet geconfigureerd",
+      "noChannel": "YouTube-kanaal niet opgegeven",
+      "connection": "Kon geen verbinding maken met YouTube API"
+    },
+    "widget": {
+      "description": "Volledig kanaal op YouTube bekijken",
+      "view": "YouTube-kanaal openen"
+    }
+  }
+}
