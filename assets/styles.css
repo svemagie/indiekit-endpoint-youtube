@@ -301,6 +301,30 @@
   margin-block-start: var(--space-m);
 }
 
+/* API endpoints list */
+.youtube-api-list {
+  font-size: var(--step--1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.youtube-api-list li {
+  border-block-end: 1px solid var(--color-border);
+  padding: var(--space-2xs) 0;
+}
+
+.youtube-api-list li:last-child {
+  border-block-end: none;
+}
+
+.youtube-api-list code {
+  background: var(--color-offset);
+  border-radius: var(--radius-s);
+  font-size: var(--step--2);
+  padding: var(--space-3xs) var(--space-2xs);
+}
+
 /* Public link banner */
 .youtube-public-link {
   align-items: center;

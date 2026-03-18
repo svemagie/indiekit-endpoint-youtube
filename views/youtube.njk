@@ -209,4 +209,15 @@
     </div>
     {% endif %}
   {% endif %}
+
+  {# ── API Endpoints reference ── #}
+  {% call section({ title: __("youtube.api.title") }) %}
+    <ul class="youtube-api-list">
+      <li><a href="{{ mountPath }}/api/videos"><code>{{ mountPath }}/api/videos</code></a> — {{ __("youtube.api.videos") }}</li>
+      <li><a href="{{ mountPath }}/api/channel"><code>{{ mountPath }}/api/channel</code></a> — {{ __("youtube.api.channel") }}</li>
+      <li><a href="{{ mountPath }}/api/live"><code>{{ mountPath }}/api/live</code></a> — {{ __("youtube.api.live") }}</li>
+      <li><a href="{{ mountPath }}/api/likes"><code>{{ mountPath }}/api/likes</code></a> — {{ __("youtube.api.likes") }}</li>
+      <li><a href="{{ mountPath }}/likes"><code>{{ mountPath }}/likes</code></a> — {{ __("youtube.api.likesDashboard") }}</li>
+    </ul>
+  {% endcall %}
 {% endblock %}

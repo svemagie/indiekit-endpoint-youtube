@@ -22,6 +22,14 @@
       "description": "Vollständigen Kanal auf YouTube anzeigen",
       "view": "YouTube-Kanal öffnen"
     },
+    "api": {
+      "title": "API-Endpunkte",
+      "videos": "Neueste Videos (JSON)",
+      "channel": "Kanalinfo (JSON)",
+      "live": "Live-Status (JSON)",
+      "likes": "Synchronisierte Likes (JSON)",
+      "likesDashboard": "Likes-Dashboard"
+    },
     "likes": {
       "title": "YouTube Likes",
       "description": "Verbinde dein YouTube-Konto, um deine gelikten Videos als Like-Beiträge auf deinem Blog zu synchronisieren. Nur neue Likes (nach dem Verbinden) erzeugen Beiträge.",

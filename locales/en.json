@@ -22,6 +22,14 @@
       "description": "View full channel on YouTube",
       "view": "Open YouTube Channel"
     },
+    "api": {
+      "title": "API Endpoints",
+      "videos": "Latest videos (JSON)",
+      "channel": "Channel info (JSON)",
+      "live": "Live status (JSON)",
+      "likes": "Synced likes (JSON)",
+      "likesDashboard": "Likes dashboard"
+    },
     "likes": {
       "title": "YouTube Likes",
       "description": "Connect your YouTube account to sync your liked videos as like posts on your blog. Only new likes (added after connecting) will create posts.",
