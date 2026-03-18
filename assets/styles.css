@@ -197,6 +197,110 @@
   padding-block-start: var(--space-xl);
 }
 
+/* ── Likes dashboard ── */
+
+/* Connection status */
+.youtube-likes-connection {
+  align-items: center;
+  display: flex;
+  gap: var(--space-m);
+}
+
+.youtube-likes-badge {
+  align-items: center;
+  border-radius: 2rem;
+  display: inline-flex;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-3xs) var(--space-s);
+}
+
+.youtube-likes-badge--connected {
+  background: #1a7f37;
+  color: white;
+}
+
+.youtube-likes-badge--disconnected {
+  background: var(--color-offset);
+  color: var(--color-text-secondary);
+}
+
+.youtube-likes-connection__action {
+  display: inline;
+}
+
+/* Sync result text */
+.youtube-likes-sync-result {
+  color: var(--color-text-secondary);
+  font-size: var(--step--1);
+  margin-block-start: var(--space-xs);
+}
+
+/* Recent likes list */
+.youtube-likes-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.youtube-likes-item {
+  align-items: center;
+  background: var(--color-offset);
+  border-radius: var(--radius-m);
+  display: flex;
+  gap: var(--space-m);
+  padding: var(--space-s);
+}
+
+.youtube-likes-item__thumb-link {
+  flex-shrink: 0;
+}
+
+.youtube-likes-item__thumb {
+  border-radius: var(--radius-s);
+  height: 54px;
+  object-fit: cover;
+  width: 96px;
+}
+
+.youtube-likes-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.youtube-likes-item__title {
+  display: -webkit-box;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-medium);
+  margin: 0 0 var(--space-3xs) 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.youtube-likes-item__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.youtube-likes-item__title a:hover {
+  text-decoration: underline;
+}
+
+.youtube-likes-item__meta {
+  color: var(--color-text-secondary);
+  display: flex;
+  font-size: var(--step--2);
+  gap: var(--space-m);
+}
+
+.youtube-likes-more {
+  margin-block-start: var(--space-m);
+}
+
 /* Public link banner */
 .youtube-public-link {
   align-items: center;

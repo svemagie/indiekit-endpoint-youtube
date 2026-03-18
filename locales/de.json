@@ -24,16 +24,32 @@
     },
     "likes": {
       "title": "YouTube Likes",
-      "description": "Verbinde dein YouTube-Konto, um deine gelikten Videos als Like-Beiträge auf deinem Blog zu synchronisieren.",
+      "description": "Verbinde dein YouTube-Konto, um deine gelikten Videos als Like-Beiträge auf deinem Blog zu synchronisieren. Nur neue Likes (nach dem Verbinden) erzeugen Beiträge.",
       "connect": "YouTube-Konto verbinden",
       "connected": "Verbunden",
+      "notConnected": "Nicht verbunden",
       "disconnect": "Trennen",
-      "sync": "Likes-Synchronisierung",
+      "sync": "Synchronisierung",
       "syncNow": "Jetzt synchronisieren",
       "lastSync": "Letzte Synchronisierung",
       "newLikes": "neu",
       "skippedLikes": "bereits synchronisiert",
       "totalLikes": "insgesamt auf YouTube",
+      "status": "Verbindung",
+      "overview": "Übersicht",
+      "recentLikes": "Letzte Likes",
+      "noLikesYet": "Noch keine gelikten Videos synchronisiert. Neue Likes auf YouTube erscheinen hier nach der nächsten Synchronisierung.",
+      "baselineComplete": "Baseline abgeschlossen",
+      "baselinePending": "Baseline ausstehend — die erste Synchronisierung erfasst bestehende Likes, ohne Beiträge zu erzeugen.",
+      "baselinedAt": "Baseline erstellt am",
+      "seenVideos": "Videos gesehen",
+      "likePosts": "Like-Beiträge erstellt",
+      "viewOnYouTube": "Auf YouTube ansehen",
+      "flash": {
+        "connected": "YouTube-Konto erfolgreich verbunden. Starte eine Synchronisierung, um bestehende Likes zu erfassen.",
+        "disconnected": "YouTube-Konto getrennt.",
+        "synced": "Synchronisierung abgeschlossen: %{synced} neu, %{skipped} übersprungen."
+      },
       "error": {
         "noOAuth": "YouTube OAuth ist nicht konfiguriert. Setze YOUTUBE_OAUTH_CLIENT_ID und YOUTUBE_OAUTH_CLIENT_SECRET."
       }

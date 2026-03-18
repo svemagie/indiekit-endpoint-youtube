@@ -1,53 +1,115 @@
 {% extends "layouts/youtube.njk" %}
 
 {% block youtube %}
-  <h2>{{ __("youtube.likes.title") }}</h2>
+
+  {# Flash messages via notificationBanner (error/success/notice come from controller) #}
 
   {% if error %}
-    {{ prose({ text: error.message }) }}
+    {# Error state: no OAuth configured or DB unavailable #}
+    {{ notificationBanner({ type: "error", text: error }) }}
+
   {% else %}
 
-    {# OAuth connection status #}
-    <div class="youtube-likes-status">
+    {# ── Connection status ── #}
+    {% call section({ title: __("youtube.likes.status") }) %}
       {% if isConnected %}
-        <div class="youtube-likes-connected">
-          <span class="youtube-likes-status__badge youtube-likes-status__badge--connected">
+        <div class="youtube-likes-connection">
+          <span class="youtube-likes-badge youtube-likes-badge--connected">
             {{ __("youtube.likes.connected") }}
           </span>
-          <form method="post" action="{{ mountPath }}/likes/disconnect" style="display:inline;">
-            {{ button({ type: "submit", text: __("youtube.likes.disconnect"), classes: "button--secondary" }) }}
+          <form method="post" action="{{ mountPath }}/likes/disconnect" class="youtube-likes-connection__action">
+            {{ button({ type: "submit", text: __("youtube.likes.disconnect") }) }}
           </form>
         </div>
       {% else %}
+        <div class="youtube-likes-connection">
+          <span class="youtube-likes-badge youtube-likes-badge--disconnected">
+            {{ __("youtube.likes.notConnected") }}
+          </span>
+        </div>
         <p>{{ __("youtube.likes.description") }}</p>
         {{ button({ href: mountPath + "/likes/connect", text: __("youtube.likes.connect") }) }}
       {% endif %}
-    </div>
+    {% endcall %}
 
-    {# Sync controls (only when connected) #}
     {% if isConnected %}
-    <div class="youtube-likes-sync" style="margin-block-start: var(--space-l);">
+
+      {# ── Overview stats ── #}
+      {% call section({ title: __("youtube.likes.overview") }) %}
+        {{ summary({
+          rows: [
+            {
+              key: { text: __("youtube.likes.seenVideos") },
+              value: { text: seenCount | string }
+            },
+            {
+              key: { text: __("youtube.likes.likePosts") },
+              value: { text: totalLikePosts | string }
+            },
+            {
+              key: { text: __("youtube.likes.baselineComplete") if baseline else __("youtube.likes.baselinePending") | truncate(40) },
+              value: { text: baseline.completedAt if baseline else "—" }
+            },
+            {
+              key: { text: __("youtube.likes.lastSync") },
+              value: { text: lastSync.lastSyncAt if lastSync else "—" }
+            }
+          ] | selectattr("key.text") | list
+        }) }}
+
+        {% if lastSync %}
+        <p class="youtube-likes-sync-result">
+          {{ lastSync.synced }} {{ __("youtube.likes.newLikes") }},
+          {{ lastSync.skipped }} {{ __("youtube.likes.skippedLikes") }},
+          {{ lastSync.total }} {{ __("youtube.likes.totalLikes") }}
+        </p>
+        {% endif %}
+      {% endcall %}
+
+      {# ── Sync controls ── #}
       {% call section({ title: __("youtube.likes.sync") }) %}
         <form method="post" action="{{ mountPath }}/likes/sync">
           {{ button({ type: "submit", text: __("youtube.likes.syncNow") }) }}
         </form>
+      {% endcall %}
 
-        {% if lastSync %}
-        <div class="youtube-likes-sync__info" style="margin-block-start: var(--space-s);">
-          <p>
-            {{ __("youtube.likes.lastSync") }}:
-            <time datetime="{{ lastSync.lastSyncAt }}">{{ lastSync.lastSyncAt }}</time>
+      {# ── Recent likes ── #}
+      {% call section({ title: __("youtube.likes.recentLikes") }) %}
+        {% if recentLikes and recentLikes.length > 0 %}
+          <ul class="youtube-likes-list">
+            {% for like in recentLikes %}
+            <li class="youtube-likes-item">
+              {% if like["youtube-thumbnail"] %}
+              <a href="{{ like['like-of'] }}" target="_blank" rel="noopener" class="youtube-likes-item__thumb-link">
+                <img src="{{ like['youtube-thumbnail'] }}" alt="" class="youtube-likes-item__thumb" loading="lazy">
+              </a>
+              {% endif %}
+              <div class="youtube-likes-item__info">
+                <h4 class="youtube-likes-item__title">
+                  <a href="{{ like['like-of'] }}" target="_blank" rel="noopener">
+                    {{ like.name }}
+                  </a>
+                </h4>
+                <div class="youtube-likes-item__meta">
+                  <span>{{ like["youtube-channel"] }}</span>
+                  <time datetime="{{ like.published }}">{{ like.published }}</time>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+
+          {% if totalLikePosts > 10 %}
+          <p class="youtube-likes-more">
+            {{ button({ href: mountPath + "/api/likes?limit=100", text: __("youtube.viewAll") + " (" + totalLikePosts + ")" }) }}
           </p>
-          <p>
-            {{ lastSync.synced }} {{ __("youtube.likes.newLikes") }},
-            {{ lastSync.skipped }} {{ __("youtube.likes.skippedLikes") }},
-            {{ lastSync.total }} {{ __("youtube.likes.totalLikes") }}
-          </p>
-        </div>
+          {% endif %}
+        {% else %}
+          {{ prose({ text: __("youtube.likes.noLikesYet") }) }}
         {% endif %}
       {% endcall %}
-    </div>
-    {% endif %}
 
+    {% endif %}
   {% endif %}
+
 {% endblock %}
