@@ -289,6 +289,117 @@ channels: [
 
 Either `id` or `handle` is required. The `name` field is optional and used for display purposes.
 
+## YouTube Likes Sync
+
+Sync your YouTube liked videos as "like" posts on your IndieWeb blog. Each liked video becomes a like post with the video URL, title, channel name, and thumbnail.
+
+### Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+2. Create an **OAuth 2.0 Client ID** (Application type: Web application)
+3. Add an authorized redirect URI: `https://yourdomain.com/youtube/likes/callback`
+4. Make sure **YouTube Data API v3** is enabled for the project
+5. Set the environment variables:
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `YOUTUBE_OAUTH_CLIENT_ID` | Yes | OAuth 2.0 client ID |
+| `YOUTUBE_OAUTH_CLIENT_SECRET` | Yes | OAuth 2.0 client secret |
+
+6. Add the OAuth config to your Indiekit configuration:
+
+```javascript
+"@rmdes/indiekit-endpoint-youtube": {
+  mountPath: "/youtube",
+  apiKey: process.env.YOUTUBE_API_KEY,
+  channelId: process.env.YOUTUBE_CHANNEL_ID,
+  oauth: {
+    clientId: process.env.YOUTUBE_OAUTH_CLIENT_ID,
+    clientSecret: process.env.YOUTUBE_OAUTH_CLIENT_SECRET,
+  },
+  likes: {
+    syncInterval: 3_600_000,  // 1 hour (default)
+    maxPages: 3,              // 50 likes per page, up to 150 per sync
+    autoSync: true,           // enable background sync
+  },
+},
+```
+
+7. Visit `/youtube/likes` in the Indiekit admin panel and click **Connect YouTube Account**
+8. Authorize access — your refresh token is stored in MongoDB and persists across restarts
+
+### Likes Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `oauth.clientId` | - | Google OAuth 2.0 client ID |
+| `oauth.clientSecret` | - | Google OAuth 2.0 client secret |
+| `likes.syncInterval` | `3600000` | Background sync interval in ms (1 hour) |
+| `likes.maxPages` | `3` | Max pages per sync (50 likes/page) |
+| `likes.autoSync` | `true` | Enable background periodic sync |
+
+### Likes Routes
+
+#### Admin Routes (require authentication)
+
+| Route | Description |
+|-------|-------------|
+| `GET /youtube/likes` | OAuth status, sync info, and controls |
+| `GET /youtube/likes/connect` | Start OAuth flow (redirects to Google) |
+| `POST /youtube/likes/disconnect` | Remove stored tokens |
+| `POST /youtube/likes/sync` | Trigger manual sync |
+
+#### Public Routes
+
+| Route | Description |
+|-------|-------------|
+| `GET /youtube/likes/callback` | OAuth callback (Google redirects here) |
+| `GET /youtube/api/likes` | JSON API for synced likes (`?limit=N&offset=N`) |
+
+### Likes API Response
+
+#### GET /youtube/api/likes
+
+```json
+{
+  "likes": [
+    {
+      "post-type": "like",
+      "like-of": "https://www.youtube.com/watch?v=abc123",
+      "name": "Liked \"Video Title\" by Channel Name",
+      "published": "2024-01-15T10:00:00Z",
+      "url": "https://yourdomain.com/likes/yt-like-abc123/",
+      "youtube-video-id": "abc123",
+      "youtube-channel": "Channel Name",
+      "youtube-thumbnail": "https://i.ytimg.com/vi/abc123/mqdefault.jpg"
+    }
+  ],
+  "count": 20,
+  "total": 142,
+  "offset": 0
+}
+```
+
+### Likes Quota Usage
+
+Fetching liked videos uses `videos.list` with `myRating=like` — **1 quota unit per page** (50 videos). With default settings (3 pages per sync, hourly), that's ~72 units/day.
+
+### Eleventy Integration for Likes
+
+```javascript
+// _data/youtubeLikes.js
+import EleventyFetch from "@11ty/eleventy-fetch";
+
+export default async function() {
+  const baseUrl = process.env.SITE_URL || "https://example.com";
+  const data = await EleventyFetch(
+    `${baseUrl}/youtube/api/likes?limit=50`,
+    { duration: "15m", type: "json" }
+  );
+  return data.likes;
+}
+```
+
 ## Quota Efficiency
 
 YouTube Data API has a daily quota (10,000 units by default). This plugin is optimized:
