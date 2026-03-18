@@ -303,10 +303,12 @@ First sync after connecting:
 Every subsequent sync (hourly background + manual trigger):
   YouTube API → fetch liked videos → compare against youtubeLikesSeen
     ↓ new like found (not in seen set)
-  Insert into youtubeLikesSeen + create "like" post in posts collection
+  Insert into youtubeLikesSeen + create "like" post (as draft) in posts collection
     ↓ already seen
   Skip
 ```
+
+New like posts are created as **drafts** (`post-status: draft`) so they can be reviewed before publishing. The post content is `Video Title - Channel Name`.
 
 The baseline prevents mass post creation when you connect an account with hundreds of existing likes.
 
