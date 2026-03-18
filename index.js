@@ -95,6 +95,7 @@ export default class YouTubeEndpoint {
     protectedRouter.get("/likes/connect", likesController.connect);
     protectedRouter.post("/likes/disconnect", likesController.disconnect);
     protectedRouter.post("/likes/sync", likesController.sync);
+    protectedRouter.post("/likes/reset", likesController.reset);
 
     return protectedRouter;
   }

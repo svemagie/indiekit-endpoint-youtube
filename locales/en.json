@@ -45,10 +45,14 @@
       "seenVideos": "videos seen",
       "likePosts": "like posts created",
       "viewOnYouTube": "View on YouTube",
+      "reset": "Reset",
+      "resetDescription": "Delete all synced like posts, seen video IDs, and baseline. Next sync will re-baseline.",
+      "resetConfirm": "Delete all likes data",
       "flash": {
         "connected": "YouTube account connected successfully. Run a sync to baseline your existing likes.",
         "disconnected": "YouTube account disconnected.",
-        "synced": "Sync complete: %{synced} new, %{skipped} skipped."
+        "synced": "Sync complete: %{synced} new, %{skipped} skipped.",
+        "reset": "Reset complete: %{count} like posts deleted. Baseline cleared."
       },
       "error": {
         "noOAuth": "YouTube OAuth is not configured. Set YOUTUBE_OAUTH_CLIENT_ID and YOUTUBE_OAUTH_CLIENT_SECRET."

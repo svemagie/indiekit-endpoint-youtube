@@ -73,6 +73,15 @@
         </form>
       {% endcall %}
 
+      {# ── Reset (destructive, hidden in details) ── #}
+      {% call section({ title: __("youtube.likes.reset") }) %}
+        {% call details({ summary: __("youtube.likes.resetDescription") }) %}
+          <form method="post" action="{{ mountPath }}/likes/reset">
+            {{ button({ type: "submit", text: __("youtube.likes.resetConfirm") }) }}
+          </form>
+        {% endcall %}
+      {% endcall %}
+
       {# ── Recent likes ── #}
       {% call section({ title: __("youtube.likes.recentLikes") }) %}
         {% if recentLikes and recentLikes.length > 0 %}
