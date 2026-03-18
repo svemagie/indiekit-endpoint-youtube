@@ -357,23 +357,45 @@ The baseline prevents mass post creation when you connect an account with hundre
 | `likes.maxPages` | `3` | Max pages per sync (50 likes/page) |
 | `likes.autoSync` | `true` | Enable background periodic sync |
 
+### Admin Dashboard (`/youtube/likes`)
+
+The likes page in the Indiekit admin panel provides a full overview:
+
+**Connection section**
+- Green "Connected" badge when authorized, with a Disconnect button
+- "Not connected" badge when not authorized, with a description and Connect button that initiates the OAuth flow
+
+**Overview section** (only when connected)
+- Summary table showing: videos seen (baseline + subsequent), like posts created, baseline status and timestamp, last sync timestamp
+- Sync result counts from the most recent run (new / skipped / total)
+
+**Sync section** (only when connected)
+- "Sync Now" button to trigger a manual sync. Redirects back to the dashboard with a flash message showing results.
+
+**Recent Likes section** (only when connected)
+- List of the 10 most recent like posts with YouTube thumbnail, video title (linked), channel name, and publication date
+- "View All" link to the JSON API when more than 10 likes exist
+
+**Flash messages**
+- Query-param driven via Indiekit's `notificationBanner`: `?connected=1` (success), `?disconnected=1` (notice), `?synced=N&skipped=N` (success), `?error=message` (error)
+
 ### Likes Routes
 
 #### Admin Routes (require authentication)
 
-| Route | Description |
-|-------|-------------|
-| `GET /youtube/likes` | OAuth status, sync info, and controls |
-| `GET /youtube/likes/connect` | Start OAuth flow (redirects to Google) |
-| `POST /youtube/likes/disconnect` | Remove stored tokens |
-| `POST /youtube/likes/sync` | Trigger manual sync |
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/youtube/likes` | GET | Dashboard: connection status, overview stats, sync controls, recent likes |
+| `/youtube/likes/connect` | GET | Redirects to Google OAuth consent screen |
+| `/youtube/likes/disconnect` | POST | Deletes stored OAuth tokens, redirects to dashboard |
+| `/youtube/likes/sync` | POST | Triggers manual sync, redirects to dashboard with results |
 
 #### Public Routes
 
-| Route | Description |
-|-------|-------------|
-| `GET /youtube/likes/callback` | OAuth callback (Google redirects here) |
-| `GET /youtube/api/likes` | JSON API for synced likes (`?limit=N&offset=N`) |
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/youtube/likes/callback` | GET | OAuth callback — Google redirects here after authorization |
+| `/youtube/api/likes` | GET | JSON API for synced likes (`?limit=N&offset=N`, max 100) |
 
 ### MongoDB Collections
 
