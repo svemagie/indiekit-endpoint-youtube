@@ -291,7 +291,24 @@ Either `id` or `handle` is required. The `name` field is optional and used for d
 
 ## YouTube Likes Sync
 
-Sync your YouTube liked videos as "like" posts on your IndieWeb blog. Each liked video becomes a like post with the video URL, title, channel name, and thumbnail.
+Sync your YouTube liked videos as "like" posts on your IndieWeb blog. Only **new likes** (added after connecting) produce posts — existing likes are baselined without generating any content.
+
+### How it works
+
+```
+First sync after connecting:
+  YouTube API → fetch all liked video IDs → store in youtubeLikesSeen collection
+  (no posts created — baseline snapshot only)
+
+Every subsequent sync (hourly background + manual trigger):
+  YouTube API → fetch liked videos → compare against youtubeLikesSeen
+    ↓ new like found (not in seen set)
+  Insert into youtubeLikesSeen + create "like" post in posts collection
+    ↓ already seen
+  Skip
+```
+
+The baseline prevents mass post creation when you connect an account with hundreds of existing likes.
 
 ### Setup
 
@@ -328,6 +345,8 @@ Sync your YouTube liked videos as "like" posts on your IndieWeb blog. Each liked
 7. Visit `/youtube/likes` in the Indiekit admin panel and click **Connect YouTube Account**
 8. Authorize access — your refresh token is stored in MongoDB and persists across restarts
 
+> **Brand Account caveat:** If your YouTube channel runs under a Brand Account, you must select that account (not your personal Google account) during the OAuth consent screen. The `myRating=like` API only returns likes for the authenticated account. Selecting the wrong account results in an "account is closed" error.
+
 ### Likes Options
 
 | Option | Default | Description |
@@ -355,6 +374,13 @@ Sync your YouTube liked videos as "like" posts on your IndieWeb blog. Each liked
 |-------|-------------|
 | `GET /youtube/likes/callback` | OAuth callback (Google redirects here) |
 | `GET /youtube/api/likes` | JSON API for synced likes (`?limit=N&offset=N`) |
+
+### MongoDB Collections
+
+| Collection | Purpose |
+|------------|---------|
+| `youtubeMeta` | OAuth tokens (`key: "oauth_tokens"`), sync status (`key: "likes_sync"`), baseline flag (`key: "likes_baseline"`) |
+| `youtubeLikesSeen` | Set of all video IDs ever seen (indexed on `videoId`, unique). Prevents duplicate posts and ensures only new likes after baseline produce posts. |
 
 ### Likes API Response
 
@@ -399,6 +425,17 @@ export default async function() {
   return data.likes;
 }
 ```
+
+### Troubleshooting
+
+**"The YouTube account of the authenticated user is closed"**
+You authorized the wrong Google account. Your liked videos live on a Brand Account, but OAuth used your personal account. Disconnect (`POST /youtube/likes/disconnect`), reconnect, and pick the correct account.
+
+**First sync created zero posts**
+This is expected. The first sync snapshots existing likes as baseline. Posts are only created for likes added after that point.
+
+**Want to reset the baseline?**
+Delete the `likes_baseline` document from `youtubeMeta` and all documents from `youtubeLikesSeen`. The next sync will re-baseline.
 
 ## Quota Efficiency
 
