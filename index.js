@@ -6,6 +6,8 @@ import { dashboardController } from "./lib/controllers/dashboard.js";
 import { videosController } from "./lib/controllers/videos.js";
 import { channelController } from "./lib/controllers/channel.js";
 import { liveController } from "./lib/controllers/live.js";
+import { likesController } from "./lib/controllers/likes.js";
+import { startLikesSync } from "./lib/likes-sync.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -25,18 +27,40 @@ const defaults = {
   limits: {
     videos: 10,
   },
+  // OAuth 2.0 for liked-videos sync
+  oauth: {
+    clientId: process.env.YOUTUBE_OAUTH_CLIENT_ID || "",
+    clientSecret: process.env.YOUTUBE_OAUTH_CLIENT_SECRET || "",
+  },
+  // Likes sync settings
+  likes: {
+    syncInterval: 3_600_000, // 1 hour
+    maxPages: 3, // 50 likes per page → up to 150 likes per sync
+    autoSync: true,
+  },
 };
 
 export default class YouTubeEndpoint {
   name = "YouTube channel endpoint";
 
   constructor(options = {}) {
-    this.options = { ...defaults, ...options };
+    this.options = {
+      ...defaults,
+      ...options,
+      oauth: { ...defaults.oauth, ...options.oauth },
+      likes: { ...defaults.likes, ...options.likes },
+    };
     this.mountPath = this.options.mountPath;
   }
 
   get environment() {
-    return ["YOUTUBE_API_KEY", "YOUTUBE_CHANNEL_ID", "YOUTUBE_CHANNEL_HANDLE"];
+    return [
+      "YOUTUBE_API_KEY",
+      "YOUTUBE_CHANNEL_ID",
+      "YOUTUBE_CHANNEL_HANDLE",
+      "YOUTUBE_OAUTH_CLIENT_ID",
+      "YOUTUBE_OAUTH_CLIENT_SECRET",
+    ];
   }
 
   get localesDirectory() {
@@ -60,11 +84,17 @@ export default class YouTubeEndpoint {
 
   /**
    * Protected routes (require authentication)
-   * Admin dashboard
+   * Admin dashboard + likes management
    */
   get routes() {
     protectedRouter.get("/", dashboardController.get);
     protectedRouter.post("/refresh", dashboardController.refresh);
+
+    // Likes / OAuth routes (protected except callback)
+    protectedRouter.get("/likes", likesController.get);
+    protectedRouter.get("/likes/connect", likesController.connect);
+    protectedRouter.post("/likes/disconnect", likesController.disconnect);
+    protectedRouter.post("/likes/sync", likesController.sync);
 
     return protectedRouter;
   }
@@ -77,6 +107,10 @@ export default class YouTubeEndpoint {
     publicRouter.get("/api/videos", videosController.api);
     publicRouter.get("/api/channel", channelController.api);
     publicRouter.get("/api/live", liveController.api);
+    publicRouter.get("/api/likes", likesController.api);
+
+    // OAuth callback must be public (Google redirects here)
+    publicRouter.get("/likes/callback", likesController.callback);
 
     return publicRouter;
   }
@@ -84,8 +118,24 @@ export default class YouTubeEndpoint {
   init(Indiekit) {
     Indiekit.addEndpoint(this);
 
+    // Register MongoDB collections
+    Indiekit.addCollection("youtubeMeta");
+
     // Store YouTube config in application for controller access
     Indiekit.config.application.youtubeConfig = this.options;
     Indiekit.config.application.youtubeEndpoint = this.mountPath;
+
+    // Store database getter for controller access
+    Indiekit.config.application.getYoutubeDb = () => Indiekit.database;
+
+    // Start background likes sync if OAuth is configured and autoSync is on
+    if (
+      this.options.oauth?.clientId &&
+      this.options.oauth?.clientSecret &&
+      this.options.likes?.autoSync !== false &&
+      Indiekit.config.application.mongodbUrl
+    ) {
+      startLikesSync(Indiekit, this.options);
+    }
   }
 }

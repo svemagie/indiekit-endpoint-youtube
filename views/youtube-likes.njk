@@ -1,0 +1,53 @@
+{% extends "layouts/youtube.njk" %}
+
+{% block youtube %}
+  <h2>{{ __("youtube.likes.title") }}</h2>
+
+  {% if error %}
+    {{ prose({ text: error.message }) }}
+  {% else %}
+
+    {# OAuth connection status #}
+    <div class="youtube-likes-status">
+      {% if isConnected %}
+        <div class="youtube-likes-connected">
+          <span class="youtube-likes-status__badge youtube-likes-status__badge--connected">
+            {{ __("youtube.likes.connected") }}
+          </span>
+          <form method="post" action="{{ mountPath }}/likes/disconnect" style="display:inline;">
+            {{ button({ type: "submit", text: __("youtube.likes.disconnect"), classes: "button--secondary" }) }}
+          </form>
+        </div>
+      {% else %}
+        <p>{{ __("youtube.likes.description") }}</p>
+        {{ button({ href: mountPath + "/likes/connect", text: __("youtube.likes.connect") }) }}
+      {% endif %}
+    </div>
+
+    {# Sync controls (only when connected) #}
+    {% if isConnected %}
+    <div class="youtube-likes-sync" style="margin-block-start: var(--space-l);">
+      {% call section({ title: __("youtube.likes.sync") }) %}
+        <form method="post" action="{{ mountPath }}/likes/sync">
+          {{ button({ type: "submit", text: __("youtube.likes.syncNow") }) }}
+        </form>
+
+        {% if lastSync %}
+        <div class="youtube-likes-sync__info" style="margin-block-start: var(--space-s);">
+          <p>
+            {{ __("youtube.likes.lastSync") }}:
+            <time datetime="{{ lastSync.lastSyncAt }}">{{ lastSync.lastSyncAt }}</time>
+          </p>
+          <p>
+            {{ lastSync.synced }} {{ __("youtube.likes.newLikes") }},
+            {{ lastSync.skipped }} {{ __("youtube.likes.skippedLikes") }},
+            {{ lastSync.total }} {{ __("youtube.likes.totalLikes") }}
+          </p>
+        </div>
+        {% endif %}
+      {% endcall %}
+    </div>
+    {% endif %}
+
+  {% endif %}
+{% endblock %}

@@ -21,6 +21,22 @@
     "widget": {
       "description": "Vollständigen Kanal auf YouTube anzeigen",
       "view": "YouTube-Kanal öffnen"
+    },
+    "likes": {
+      "title": "YouTube Likes",
+      "description": "Verbinde dein YouTube-Konto, um deine gelikten Videos als Like-Beiträge auf deinem Blog zu synchronisieren.",
+      "connect": "YouTube-Konto verbinden",
+      "connected": "Verbunden",
+      "disconnect": "Trennen",
+      "sync": "Likes-Synchronisierung",
+      "syncNow": "Jetzt synchronisieren",
+      "lastSync": "Letzte Synchronisierung",
+      "newLikes": "neu",
+      "skippedLikes": "bereits synchronisiert",
+      "totalLikes": "insgesamt auf YouTube",
+      "error": {
+        "noOAuth": "YouTube OAuth ist nicht konfiguriert. Setze YOUTUBE_OAUTH_CLIENT_ID und YOUTUBE_OAUTH_CLIENT_SECRET."
+      }
     }
   }
 }
