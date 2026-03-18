@@ -303,7 +303,9 @@ First sync after connecting:
 Every subsequent sync (hourly background + manual trigger):
   YouTube API → fetch liked videos → compare against youtubeLikesSeen
     ↓ new like found (not in seen set)
-  Insert into youtubeLikesSeen + create "like" post (as draft) in posts collection
+  Mark as seen → generate markdown via publication.postTemplate()
+    → write file to store (e.g. GitHub) via store.createFile()
+    → insert post document into MongoDB posts collection
     ↓ already seen
   Skip
 ```
@@ -311,6 +313,20 @@ Every subsequent sync (hourly background + manual trigger):
 New like posts are created as **drafts** (`post-status: draft`) so they can be reviewed before publishing. The post content is `Video Title - Channel Name`.
 
 The baseline prevents mass post creation when you connect an account with hundreds of existing likes.
+
+### Store integration
+
+Like posts are written to the configured Indiekit store (e.g. `@indiekit/store-github`) as markdown files, exactly like posts created via Micropub. The sync:
+
+1. Builds JF2 properties (`like-of`, `name`, `content`, `post-status: draft`, etc.)
+2. Strips internal `mp-*` and `post-type` keys (matching Micropub's `getPostTemplateProperties`)
+3. Calls `publication.postTemplate(templateProperties)` to generate frontmatter + content
+4. Calls `publication.store.createFile(path, content, { message })` to commit the file
+5. Inserts the post document into MongoDB (Indiekit needs both)
+
+The store commit message follows Indiekit's `storeMessageTemplate` format. If the store write fails, the error is logged but the MongoDB insert still happens (so the sync doesn't retry the same video).
+
+Reset (`POST /youtube/likes/reset`) also deletes files from the store before removing MongoDB documents.
 
 ### Setup
 
@@ -391,6 +407,7 @@ The likes page in the Indiekit admin panel provides a full overview:
 | `/youtube/likes/connect` | GET | Redirects to Google OAuth consent screen |
 | `/youtube/likes/disconnect` | POST | Deletes stored OAuth tokens, redirects to dashboard |
 | `/youtube/likes/sync` | POST | Triggers manual sync, redirects to dashboard with results |
+| `/youtube/likes/reset` | POST | Deletes all like posts (store + MongoDB), seen IDs, and baseline |
 
 #### Public Routes
 
@@ -416,7 +433,7 @@ The likes page in the Indiekit admin panel provides a full overview:
     {
       "post-type": "like",
       "like-of": "https://www.youtube.com/watch?v=abc123",
-      "name": "Liked \"Video Title\" by Channel Name",
+      "name": "Video Title - Channel Name",
       "published": "2024-01-15T10:00:00Z",
       "url": "https://yourdomain.com/likes/yt-like-abc123/",
       "youtube-video-id": "abc123",
@@ -458,8 +475,11 @@ You authorized the wrong Google account. Your liked videos live on a Brand Accou
 **First sync created zero posts**
 This is expected. The first sync snapshots existing likes as baseline. Posts are only created for likes added after that point.
 
-**Want to reset the baseline?**
-Delete the `likes_baseline` document from `youtubeMeta` and all documents from `youtubeLikesSeen`. The next sync will re-baseline.
+**Want to reset everything?**
+Use the Reset button on the `/youtube/likes` dashboard (or `POST /youtube/likes/reset`). This deletes all like post files from the store, removes all MongoDB documents (posts, seen IDs, baseline, sync status), and starts fresh. The next sync will re-baseline.
+
+**Posts created but files missing from store**
+If you upgraded from a version that only wrote to MongoDB, use Reset to clear the old posts and re-sync. New syncs will write both the markdown file and the MongoDB document.
 
 ## Quota Efficiency
 
